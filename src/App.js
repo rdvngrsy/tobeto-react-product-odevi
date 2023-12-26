@@ -4,7 +4,8 @@ import Homepage from "./pages/Homepage/Homepage"
 import Products from "./pages/Products/Products"
 import Navbar from "./components/Navbar/Navbar"
 import ProductDetail from "./pages/ProductDetail/ProductDetail"
-import AddProduct from "./pages/AddProduct/AddProduct"
+import AddProduct from "./components/AddProduct/AddProduct"
+
 
 
 

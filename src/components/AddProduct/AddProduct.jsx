@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddProduct = ( props ) => {
+const AddProduct = (props) => {
   const [newProduct, setNewProduct] = useState({
     id: "",
     title: "",
@@ -13,25 +13,29 @@ const AddProduct = ( props ) => {
     brand: "",
     category: "",
     thumbnail: "",
-    images: [],
+    images: [], // images'i bir dizi olarak tanımla
   });
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
   };
 
+  // Images inputu için ayrı bir handleChange fonksiyonu
+  const handleImagesChange = (e) => {
+    const { value } = e.target;
+    // Virgülle ayrılmış string'i diziye çevir ve state'i güncelle
+    setNewProduct((prevProduct) => ({ ...prevProduct, images: value.split(",") }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Yeni ürünü eklemek için axios kullanımı
     try {
       const response = await axios.post("https://dummyjson.com/products/add", newProduct);
       console.log("Yeni ürün eklendi:", response.data);
-      //onAddProduct((prevProducts) => [...prevProducts, response.data]);
-      props.onAddProduct(response.data)
+      props.onAddProduct(response.data);
     } catch (error) {
       console.error("Ürün eklenirken hata oluştu:", error);
     }
@@ -42,7 +46,6 @@ const AddProduct = ( props ) => {
       <form onSubmit={handleSubmit}>
         <div className="row justify-content-md-center">
           <div className="col-8">
-            {/* Diğer inputları buraya ekleyebilirsiniz */}
             <div className="input-group mb-3">
               <span className="input-group-text" id="id">
                 ID
@@ -82,7 +85,34 @@ const AddProduct = ( props ) => {
                 aria-describedby="description"
               />
             </div>
-            {/* Diğer inputları buraya ekleyebilirsiniz */}
+            <div className="input-group mb-3">
+              <span className="input-group-text" id="thumbnail">
+                Thumbnail
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                name="thumbnail"
+                value={newProduct.thumbnail}
+                onChange={(e) => handleInputChange(e)}
+                placeholder="https://www.example.com/image1.jpg"
+                aria-describedby="thumbnail"
+              />
+            </div>
+            <div className="input-group mb-3">
+              <span className="input-group-text" id="images">
+                Images
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                name="images"
+                value={newProduct.images.join(",")}
+                onChange={handleImagesChange}
+                placeholder="https://www.example.com/image1.jpg, https://www.example.com/image2.jpg"
+                aria-describedby="images"
+              />
+            </div>
             <button type="submit" className="btn btn-primary">
               Ürünü Ekle
             </button>
