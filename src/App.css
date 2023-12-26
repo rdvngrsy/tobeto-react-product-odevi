@@ -13,3 +13,7 @@ div{
 .yellow-border{
   border-color: yellow;
 }
+
+.hidden {
+  display: none;
+}
