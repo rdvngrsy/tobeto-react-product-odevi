@@ -17,7 +17,7 @@ const Homepage = (props: Props) => {
     let service = new ProductService();
     let response = await service.getAll();
     setProducts(response.data.products); 
-    console.log(products);
+    console.log(response.data.products);
        
   }
 

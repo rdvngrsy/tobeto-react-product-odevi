@@ -2,12 +2,20 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ProductModel } from '../../models/responses/Products/ProductModel'
 import "./ProductCard.css";
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/features/cartSlice';
 
 type Props = {
   product: ProductModel,
 }
 
 const ProductCard = (props: Props) => {
+  const dispatch = useDispatch();
+
+  const addProductToCard = () => {
+		dispatch(addToCart(props.product));
+	};
+
   return (
     <div className="card">
     <img
@@ -21,6 +29,9 @@ const ProductCard = (props: Props) => {
       <Link to={"/product-detail/"+props.product.id} className="btn btn-primary">
         Detail
       </Link>
+      <button onClick={addProductToCard} className="btn btn-success ms-3">
+					Sepete Ekle
+			</button>
       <button className="btn btn-danger ms-3">
         Sil
       </button>
