@@ -1,8 +1,13 @@
+import { type } from "os";
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const ProductDetailCarousel = (props) => {
+type Props = {
+  images: string[],
+}
+
+const ProductDetailCarousel = (props:Props) => {
   return (
     <Carousel showArrows={true} showThumbs={false} infiniteLoop={true}>
       {props.images.map((image, index) => (
