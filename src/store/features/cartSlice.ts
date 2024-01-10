@@ -1,16 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ProductModel } from '../../models/responses/Products/ProductModel';
 
-export interface CartState {
-  cartItems: {
-    quantity: number;
-    product: ProductModel;
-  }[];
+export interface CartItems {
+  quantity: number;
+  product: ProductModel;
 }
-export const cartItems:CartState['cartItems']=[]
 
-const initialState: CartState = {
-  cartItems: cartItems,
+const initialState = {
+  cartItems: (JSON.parse(localStorage.getItem("cart")!) || []) as CartItems[],
 }
 
 export const cartSlice = createSlice({
@@ -21,31 +18,23 @@ export const cartSlice = createSlice({
       const existingProduct = state.cartItems.find(c => c.product.id === action.payload.id);
     
       if (existingProduct) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map(c =>
-            c.product.id === action.payload.id
-              ? { ...c, quantity: c.quantity + 1 }
-              : c
-          ),
-        };
+        existingProduct.quantity++;
       } else {
-        return {
-          ...state,
-          cartItems: [...state.cartItems, { quantity: 1, product: action.payload }],
-        };
+        //immer toolkit te artık immutable sorununu çözüyor. Push yapılabilir.
+        state.cartItems.push({ quantity: 1, product: action.payload });
       }
+
+      localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
 
     removeFromCart: (state,action) => {
-      return{
-        ...state,
-        cartItems:state.cartItems.filter(c=>c.product.id !== action.payload.id)
-      }
+      state.cartItems.filter(c=>c.product.id !== action.payload.id)
+      localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
 
     clearCart: (state) => {
-      return {...state, cartItems: []};
+      state.cartItems = [];
+      localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
   },
 })
